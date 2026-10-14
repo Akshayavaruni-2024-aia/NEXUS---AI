@@ -20,7 +20,19 @@ function Logo(){return <div className="brand"><img src="/nexusflow.svg"/><span>N
 function App(){
  const [active,setActive]=useState('Overview'); const [roads,setRoads]=useState(initialRoads); const [tick,setTick]=useState(0); const [query,setQuery]=useState(''); const [zone,setZone]=useState('All zones'); const [notice,setNotice]=useState(''); const [sidebar,setSidebar]=useState(false); const [dark,setDark]=useState(true); const [predictArea,setPredictArea]=useState('Avinashi Road'); const [horizon,setHorizon]=useState('Next 2 hours'); const [prediction,setPrediction]=useState(null); const [incidentFilter,setIncidentFilter]=useState('All');
  useEffect(()=>{const t=setInterval(()=>setTick(v=>v+1),12000);return()=>clearInterval(t)},[]);
- const updatedRoads=useMemo(()=>roads.map((r,i)=>({...r,level:Math.max(8,Math.min(98,r.level + (tick?((tick+i)%3-1)*2:0))})),[roads,tick]);
+ 
+const updatedRoads = useMemo(
+  () =>
+    roads.map((r, i) => ({
+      ...r,
+      level: Math.max(
+        8,
+        Math.min(98, r.level + (tick ? ((tick + i) % 3 - 1) * 2 : 0))
+      ),
+    })),
+  [roads, tick]
+);
+
  const filtered=updatedRoads.filter(r=>(zone==='All zones'||r.zone===zone)&&r.name.toLowerCase().includes(query.toLowerCase()));
  const avg= Math.round(updatedRoads.reduce((a,r)=>a+r.level,0)/updatedRoads.length);
  const toast=(s)=>{setNotice(s);setTimeout(()=>setNotice(''),3000)};
